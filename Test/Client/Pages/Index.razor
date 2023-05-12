@@ -6,38 +6,44 @@
 @inject IProductService ProductService
 @inject ISnackbar Snackbar
 @inject NavigationManager NavigationManager
+@inject HttpClient httpClient
 
 @attribute [Authorize]
 
 <PageTitle>DashBoard de Productos</PageTitle>
 
 <h3>Mis Productos</h3>
-@*
-<MudTable Items="@Elements" Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" Filter="new Func<Element,bool>(FilterFunc1)" @bind-SelectedItem="selectedItem1">
+
+<MudTable Items="@products" Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" Filter="new Func<Test.Shared.Models.Product,bool>(FilterFunc1)">
     <ToolBarContent>
-        <MudText Typo="Typo.h6">Periodic Elements</MudText>
+        <MudText Typo="Typo.h6">Productos</MudText>
         <MudSpacer />
         <MudTextField @bind-Value="searchString1" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
     </ToolBarContent>
     <HeaderContent>
-        <MudTh>Nr</MudTh>
-        <MudTh>Sign</MudTh>
-        <MudTh>Name</MudTh>
-        <MudTh>Position</MudTh>
-        <MudTh>Molar mass</MudTh>
+        <MudTh>ID</MudTh>
+        <MudTh>Nombre</MudTh>
+        <MudTh>Descripcion</MudTh>
+        <MudTh>Precio</MudTh>
+        <MudTh>Foto</MudTh>
+        <MudTh>Acciones</MudTh>
     </HeaderContent>
     <RowTemplate>
-        <MudTd DataLabel="Nr">@context.Number</MudTd>
-        <MudTd DataLabel="Sign">@context.Sign</MudTd>
-        <MudTd DataLabel="Name">@context.Name</MudTd>
-        <MudTd DataLabel="Position">@context.Position</MudTd>
-        <MudTd DataLabel="Molar mass">@context.Molar</MudTd>
+        <MudTd DataLabel="id">@context.ProductId</MudTd>
+        <MudTd DataLabel="Name">@context.ProductName</MudTd>
+        <MudTd DataLabel="Description">@context.ProductDescription</MudTd>
+        <MudTd DataLabel="Price">@context.ProductPrice</MudTd>
+        <MudTd DataLabel="Photo">@context.ProductPhoto</MudTd>
+		<MudTd Class="pa-4 mt-4" DataLabel="Actions">
+			<MudButton Variant="Variant.Filled" Color="Color.Info" DisableElevation="true" OnClick="@(()=>ShowProduct(@context.ProductId))">Update</MudButton>
+			<MudButton Variant="Variant.Filled" Color="Color.Error" DisableElevation="true" OnClick="@(()=>DeleteProduct(@context.ProductId))">Borrar</MudButton>
+		</MudTd>
     </RowTemplate>
     <PagerContent>
         <MudTablePager />
     </PagerContent>
 </MudTable>
-*@
+@*
 <table class="table">
     <thead>
         <tr>
@@ -76,21 +82,40 @@
         @onclick="CreateNewProduct">
     Crear Nuevo Producto
 </button>
+*@
 
 @code {
 
-      Test.Shared.Models.Product product = new Test.Shared.Models.Product { ProductName = "Nuevo Producto" };
+    Test.Shared.Models.Product product = new Test.Shared.Models.Product { ProductName = "Nuevo Producto" };
+
+    Test.Shared.Models.Product Producto = new Test.Shared.Models.Product();
+
+    public List<Test.Shared.Models.Product> products = new List<Test.Shared.Models.Product>();
+
+    private bool dense = false;
+    private bool hover = true;
+    private bool striped = false;
+    private bool bordered = false;
+    private string searchString1 = "";
+    private Product selectedItem1 = null;
+    public string? Message { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        await ProductService.GetProducts();
-        await base.OnInitializedAsync();
-
+        try
+        {
+            products = await ProductService.GetProducts();
+            await base.OnInitializedAsync();
+        }
+        catch (Exception e)
+        {
+            Message = e.Message;
+        }
     }
 
     void ShowProduct(int id)
     {
-        NavigationManager.NavigateTo($"product/{id}");
+        NavigationManager.NavigateTo($"producto/{id}");
     }
 
     async Task DeleteProduct(int id)
@@ -101,24 +126,25 @@
 
     void CreateNewProduct()
     {
-        NavigationManager.NavigateTo("/product");
+        NavigationManager.NavigateTo("/producto");
     }
-    /*
-    private bool FilterFunc1(Product element) => FilterFunc(element, searchString1);
+    
+    private bool FilterFunc1(Test.Shared.Models.Product element) => FilterFunc(element, searchString1);
 
-    private bool FilterFunc(Product element, string searchString)
+    private bool FilterFunc(Test.Shared.Models.Product element, string searchString)
     {
         if (string.IsNullOrWhiteSpace(searchString))
             return true;
-        if (element.Sign.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+        //if (element.Sign.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+        //    return true;
+        if (element.ProductName.Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
-        if (element.Name.Contains(searchString, StringComparison.OrdinalIgnoreCase))
-            return true;
-        if ($"{element.Number} {element.Position} {element.Molar}".Contains(searchString))
-            return true;
+        //if ($"{element.Number} {element.Position} {element.Molar}".Contains(searchString))
+        //    return true;
         return false;
     }
-    */
+    
+    
 }
 
 

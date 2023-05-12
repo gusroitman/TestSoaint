@@ -1,6 +1,6 @@
-﻿@page "/product"
+﻿@page "/producto"
 
-@page "/product/{id:int}"
+@page "/producto/{id:int}"
 
 @attribute [Authorize]
 
@@ -38,7 +38,8 @@ else
                                   @bind-Value="model.ProductPhoto" For="@(() => model.ProductPhoto)"  />
                 </MudCardContent>
                 <MudCardActions>
-                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">@btnText</MudButton>
+                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Info" Class="ml-auto">@btnText</MudButton>
+                    <MudButton ButtonType="ButtonType.Button" Href="/" Variant="Variant.Filled" Color="Color.Warning" Class="ml-4">Volver</MudButton>
                 </MudCardActions>
             </MudCard>
         </MudItem>

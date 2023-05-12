@@ -44,13 +44,14 @@ namespace Test.Client.Services
 			return null;
 		}
 
-		public async Task GetProducts()
+
+		public async Task<List<Product>> GetProducts()
 		{
 			var result = await _http.GetFromJsonAsync<List<Product>>("api/product");
-			if (result is not null)
-				Products = result;
 
+			return result;
 		}
+
 
 		public async Task UpdateProduct(int id, Product product)
 		{
