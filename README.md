@@ -5,6 +5,7 @@
 
 #### Some screenshots of the different screens :
 
-![This is an image](https://github.com/gusroitman/TestSoaint/blob/master/Charts_MudBlazor/wwwroot/img/img1.png)
-![This is an image](https://github.com/gusroitman/TestSoaint/blob/master/Charts_MudBlazor/wwwroot/img/img1.png)
-![This is an image](https://github.com/gusroitman/TestSoaint/blob/master/Charts_MudBlazor/wwwroot/img/img1.png)
+![This is an image](https://github.com/gusroitman/TestSoaint/blob/master/Test/Client/wwwroot/img/img1.png)
+![This is an image](https://github.com/gusroitman/TestSoaint/blob/master/Test/Client/wwwroot/img/img2.png)
+![This is an image](https://github.com/gusroitman/TestSoaint/blob/master/Test/Client/wwwroot/img/img3.png)
+
