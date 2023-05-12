@@ -1,0 +1,32 @@
+﻿@using Microsoft.AspNetCore.Components.Authorization
+
+@inject NavigationManager Navigation
+
+
+<MudNavMenu Bordered="true" Dense="true" Color="Color.Info" Margin="Margin.Dense" Class="pa-2">
+	<MudNavLink Href="/" Icon="@Icons.Material.Filled.Dashboard" Match="NavLinkMatch.All">Dashboard</MudNavLink>
+	<MudNavGroup Title="Productos" Icon="@Icons.Material.Filled.ListAlt" Expanded="true">
+		<MudNavLink Href="/product" Icon="@Icons.Material.Filled.AddCircleOutline" Match="NavLinkMatch.Prefix">Agregar Producto</MudNavLink>
+		@*<MudNavLink Href="/editarproducto" Icon="@Icons.Material.Filled.Edit" Match="NavLinkMatch.Prefix">Editar Producto</MudNavLink>
+		<MudNavLink Href="/eliminarproducto" Icon="@Icons.Material.Filled.Delete" Match="NavLinkMatch.Prefix">Eliminar Producto</MudNavLink>
+		*@
+		</MudNavGroup>
+	<MudNavLink Href="/fetchdata" Icon="@Icons.Material.Outlined.Info" Match="NavLinkMatch.Prefix">WeatherData</MudNavLink>
+</MudNavMenu>
+
+<MudDivider DividerType="DividerType.Middle" Class="my-3" Style="height:2px;" />
+
+<MudNavMenu Bordered="true" Dense="true" Color="Color.Info" Margin="Margin.Dense" Class="pa-2">
+	<AuthorizeView>
+		<NotAuthorized>
+			<MudNavLink Href="register" Icon="@Icons.Material.Filled.AppRegistration" Match="NavLinkMatch.All">Registro</MudNavLink>
+			<MudNavLink Href="login" Icon="@Icons.Material.Filled.Login" Match="NavLinkMatch.All">Login</MudNavLink>
+		</NotAuthorized>
+	</AuthorizeView>
+	<AuthorizeView>
+		<Authorized>
+			<MudNavLink Href="logout" Icon="@Icons.Material.Filled.Logout" Match="NavLinkMatch.All">Logout</MudNavLink>
+		</Authorized>
+	</AuthorizeView>
+</MudNavMenu>
+

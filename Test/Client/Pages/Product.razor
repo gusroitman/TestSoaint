@@ -1,0 +1,110 @@
+﻿@page "/product"
+
+@page "/product/{id:int}"
+
+@attribute [Authorize]
+
+@using Microsoft.AspNetCore.Authorization;
+@using Test.Client.Services;
+
+@inject IProductService ProductService
+@inject ISnackbar Snackbar
+@inject NavigationManager NavigationManager
+
+@if (Id is null)
+{
+    <PageTitle>Crear un nuevo Producto</PageTitle>
+    <h3>Crear un nuevo Producto</h3>
+}
+else
+{
+    <PageTitle>Editar @model.ProductName</PageTitle>
+    <h3>Editar @model.ProductName</h3>
+}
+
+<EditForm Model="@model" OnValidSubmit="HandleSubmit">
+    <DataAnnotationsValidator />
+    <MudGrid>
+        <MudItem xs="12" sm="7">
+            <MudCard>
+                <MudCardContent>
+                    <MudTextField Label="Nombre del Producto"
+                                  @bind-Value="model.ProductName" For="@(() => model.ProductName)" />
+                    <MudTextField Label="Descripcion del Producto" Class="mt-3"
+                                  @bind-Value="model.ProductDescription" For="@(() => model.ProductDescription)" />
+                    <MudTextField Label="Precio" HelperText="Ingresa el precio" Class="mt-3"
+                                  @bind-Value="model.ProductPrice" For="@(() => model.ProductPrice)" InputType="InputType.Number" />
+                    <MudTextField Label="Foto" HelperText="Ingresa una foto" Class="mt-3"
+                                  @bind-Value="model.ProductPhoto" For="@(() => model.ProductPhoto)"  />
+                </MudCardContent>
+                <MudCardActions>
+                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">@btnText</MudButton>
+                </MudCardActions>
+            </MudCard>
+        </MudItem>
+        <MudItem xs="12">
+            <MudText Typo="Typo.body2" Align="Align.Center">
+                
+            </MudText>
+        </MudItem>
+    </MudGrid>
+</EditForm>
+
+
+@code {
+    [Parameter]
+    public int? Id { get; set; }
+
+    string btnText = string.Empty;
+    bool success;
+
+    Test.Shared.Models.Product model =
+        new Test.Shared.Models.Product { ProductName = "Nuevo Producto" };
+
+    protected override void OnInitialized()
+    {
+        btnText = Id == null ? "Guardar Nuevo Producto" : "Actualizar Producto";
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (Id is not null)
+        {
+            var result = await ProductService.GetProductById((int)Id);
+            if (result is not null)
+                model = result;
+            else
+                NavigationManager.NavigateTo("/product");
+        }
+    }
+
+    private void OnValidSubmit(EditContext context)
+    {
+        success = true;
+        StateHasChanged();
+    }
+
+    async Task HandleSubmit()
+    {
+        if (Id is null)
+        {
+            await ProductService.CreateProduct(model);
+            Snackbar.Add("El producto ha sido creado correctamente", Severity.Success);
+            success = true;
+            StateHasChanged();
+        }
+        else
+        {
+            await ProductService.UpdateProduct((int)Id, model);
+            Snackbar.Add("El producto ha sido actualizado correctamente", Severity.Success);
+            success = true;
+            StateHasChanged();
+        }
+    }
+
+    async Task DeleteProduct()
+    {
+        await ProductService.DeleteProduct(model.ProductId);
+        Snackbar.Add("El producto ha sido borrado correctamente", Severity.Success);
+    }
+}
