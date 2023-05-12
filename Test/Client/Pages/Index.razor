@@ -33,7 +33,7 @@
         <MudTd DataLabel="Name">@context.ProductName</MudTd>
         <MudTd DataLabel="Description">@context.ProductDescription</MudTd>
         <MudTd DataLabel="Price">@context.ProductPrice</MudTd>
-        <MudTd DataLabel="Photo">@context.ProductPhoto</MudTd>
+        <MudTd DataLabel="Photo"><MudImage Src="@context.ProductPhoto" Width="40" Height="40" Elevation="0" Class="rounded-lg" /></MudTd>
 		<MudTd Class="pa-4 mt-4" DataLabel="Actions">
 			<MudButton Variant="Variant.Filled" Color="Color.Info" DisableElevation="true" OnClick="@(()=>ShowProduct(@context.ProductId))">Update</MudButton>
 			<MudButton Variant="Variant.Filled" Color="Color.Error" DisableElevation="true" OnClick="@(()=>DeleteProduct(@context.ProductId))">Borrar</MudButton>
