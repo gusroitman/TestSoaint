@@ -78,8 +78,9 @@
 
     async Task DeleteProduct(int id)
     {
-        await ProductService.DeleteProduct(product.ProductId);
+        await ProductService.DeleteProduct(id);
         Snackbar.Add("El producto ha sido borrado correctamente", Severity.Success);
+        await base.OnInitializedAsync();
     }
 
     void CreateNewProduct()
