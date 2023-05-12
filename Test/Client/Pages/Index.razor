@@ -77,13 +77,6 @@
         NavigationManager.NavigateTo($"producto/{id}");
     }
 
-    async Task DeleteProduct(int id)
-    {
-        await ProductService.DeleteProduct(id);
-        Snackbar.Add("El producto ha sido borrado correctamente", Severity.Success);
-        await base.OnInitializedAsync();
-    }
-
     private async Task DeleteProductAsync(int id)
     {
         var parameters = new DialogParameters();
