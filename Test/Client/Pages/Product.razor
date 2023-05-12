@@ -59,8 +59,7 @@ else
     string btnText = string.Empty;
     bool success;
 
-    Test.Shared.Models.Product model =
-        new Test.Shared.Models.Product { ProductName = "Nuevo Producto" };
+    Test.Shared.Models.Product model = new Test.Shared.Models.Product();
 
     protected override void OnInitialized()
     {
@@ -75,7 +74,7 @@ else
             if (result is not null)
                 model = result;
             else
-                NavigationManager.NavigateTo("/product");
+                NavigationManager.NavigateTo("/producto");
         }
     }
 
