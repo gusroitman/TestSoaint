@@ -5,6 +5,7 @@
 
 @inject IProductService ProductService
 @inject ISnackbar Snackbar
+@inject IDialogService _dialogService
 @inject NavigationManager NavigationManager
 @inject HttpClient httpClient
 
@@ -36,7 +37,7 @@
         <MudTd DataLabel="Photo"><MudImage Src="@context.ProductPhoto" Width="40" Height="40" Elevation="0" Class="rounded-lg" /></MudTd>
 		<MudTd Class="pa-4 mt-4" DataLabel="Actions">
 			<MudButton Variant="Variant.Filled" Color="Color.Info" DisableElevation="true" OnClick="@(()=>ShowProduct(@context.ProductId))">Update</MudButton>
-			<MudButton Variant="Variant.Filled" Color="Color.Error" DisableElevation="true" OnClick="@(()=>DeleteProduct(@context.ProductId))">Borrar</MudButton>
+            <MudButton Variant="Variant.Filled" Color="Color.Error" DisableElevation="true" OnClick="@(()=>DeleteProductAsync(@context.ProductId))">Borrar</MudButton>
 		</MudTd>
     </RowTemplate>
     <PagerContent>
@@ -83,9 +84,21 @@
         await base.OnInitializedAsync();
     }
 
-    void CreateNewProduct()
+    private async Task DeleteProductAsync(int id)
     {
-        NavigationManager.NavigateTo("/producto");
+        var parameters = new DialogParameters();
+        parameters.Add("Id", id);
+        var dialog = await _dialogService.ShowAsync<DeleteDialog>("Confimacion de Borrado", parameters, new DialogOptions { });
+
+        var result = await dialog.Result;
+
+        if (!result.Canceled)
+        {
+            products = await ProductService.GetProducts();
+            //await base.OnInitializedAsync();
+            //StateHasChanged();
+        }
+        NavigationManager.NavigateTo("/", forceLoad: true);
     }
     
     private bool FilterFunc1(Test.Shared.Models.Product element) => FilterFunc(element, searchString1);
